@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "shop-project"
+version = "0.1.0"
+description = ""
+authors = ["Anaxuname <anaxuname@gmail.com>"]
+readme = "README.md"
+packages = [{include = "shop_project"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
