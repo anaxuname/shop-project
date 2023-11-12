@@ -17,10 +17,11 @@ Including another URLconf
 
 from django.urls import path
 
-from catalog.views import index_view
+from catalog.views import index_view, contacts_view
 
 app_name = 'catalog'
 
 urlpatterns = [
     path('', index_view, name='catalog_index'),
+    path('contacts/', contacts_view, name='catalog_contacts'),
 ]
