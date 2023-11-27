@@ -8,10 +8,10 @@
             <h4 class="my-0 font-weight-normal">{{object.name}}</h4>
         </div>
         <div class="card-body">
-            <h1 class="card-title pricing-card-title">$ 140</h1>
+            <h1 class="card-title pricing-card-title">$ {{ object.purchase_price }}</h1>
             <img src="{{ object.image_preview|mediapath }}" class="img-fluid img-thumbnail" />
             <p>{{ object.description|truncatechars:100 }}</p>
-            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
+            <a href="{% url 'catalog:catalog_product' object.pk %}" type="button" class="btn btn-lg btn-block btn-outline-primary">Подробнее о товаре</a>
         </div>
     </div>
 </div>
