@@ -7,7 +7,7 @@ from materials.models import Material
 
 class MaterialCreateView(CreateView):
     model = Material
-    fields = ('title', 'body',)
+    fields = ('title', 'body', 'image_preview', 'is_public')
     success_url = reverse_lazy('materials:list')
 
     def form_valid(self, form):
@@ -21,7 +21,7 @@ class MaterialCreateView(CreateView):
 
 class MaterialUpdateView(UpdateView):
     model = Material
-    fields = ('title', 'body',)
+    fields = ('title', 'body', 'image_preview', 'is_public')
     success_url = reverse_lazy('materials:list')
 
     def form_valid(self, form):
