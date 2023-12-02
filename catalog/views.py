@@ -15,7 +15,11 @@ def contacts_view(request):
         email = request.Post.get('email')
         message = request.Post.get('message')
         print(f'{name} ({email}): {message}')
-    return render(request, 'catalog/contacts.html')
+
+    context = {
+        'title': 'Контакты'
+    }
+    return render(request, 'catalog/contacts.html', context)
 
 
 class ProductDetailView(DetailView):
