@@ -18,14 +18,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 
-from catalog.views import index_view, contacts_view, product_view
+from catalog.views import contacts_view, ProductListView, ProductDetailView
 
 app_name = 'catalog'
 
 urlpatterns = [
-    path('', index_view, name='catalog_index'),
+    path('', ProductListView.as_view(), name='catalog_index'),
     path('contacts/', contacts_view, name='catalog_contacts'),
-    path('product/<int:pk>', product_view, name='catalog_product'),
+    path('product/<int:pk>', ProductDetailView.as_view(), name='catalog_product'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
