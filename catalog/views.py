@@ -32,9 +32,9 @@ class ProductDetailView(DetailView):
 class ProductCreateView(CreateView):
     model = Product
     form_class = ProductForm
-    success_url = reverse_lazy('catalog:index')
+    success_url = reverse_lazy('catalog:catalog_index')
 
 class ProductUpdateView(UpdateView):
     model = Product
     form_class = ProductForm
-    success_url = reverse_lazy('catalog:index')
+    success_url = reverse_lazy('catalog:catalog_index')
