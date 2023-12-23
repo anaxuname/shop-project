@@ -1,7 +1,11 @@
 {% extends 'catalog/base.html' %}
 {% load my_tags %}
 {% block content %}
+<div class="col-12 mb-5">
+    <a class="btn btn-outline-primary" href="{% url 'catalog:product_create' %}">Добавить продукт</a>
+</div>
 {% for object in object_list %}
+
 <div class="col-3">
     <div class="card mb-4 box-shadow">
         <div class="card-header">
@@ -11,7 +15,8 @@
             <h1 class="card-title pricing-card-title">$ {{ object.purchase_price }}</h1>
             <img src="{{ object.image_preview|mediapath }}" class="img-fluid img-thumbnail" />
             <p>{{ object.description|truncatechars:100 }}</p>
-            <a href="{% url 'catalog:catalog_product' object.pk %}" type="button" class="btn btn-lg btn-block btn-outline-primary">Подробнее о товаре</a>
+            <a href="{% url 'catalog:catalog_product' object.pk %}" type="button" class="btn btn-lg btn-block btn-light">Подробнее о товаре</a>
+            <a href="{% url 'catalog:product_update' object.pk %}" type="button" class="btn btn-lg btn-block btn-light">Изменить товар</a>
         </div>
     </div>
 </div>
