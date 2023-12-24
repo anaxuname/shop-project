@@ -1,12 +1,15 @@
 {% extends 'catalog/base.html' %}
 {% load my_tags %}
 {% block content %}
-
     <h4 class="my-0 font-weight-normal">{{object.name}}</h4>
     <img src="{{ object.image_preview|mediapath }}" style="width: 40vw !important;" />
 
     <h1 class="card-title pricing-card-title">$ {{ object.purchase_price }}</h1>
     <p>{{ object.description }}</p>
-
+{% if version %}
+    {% if version.active_version %}
+        {{version.version_name}}
+    {% endif %}
+{% endif %}
 
 {% endblock %}
