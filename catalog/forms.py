@@ -7,6 +7,7 @@ from catalog.models import Product
 
 class ProductForm(forms.ModelForm):
     excluded_text = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
+
     def clean_name(self):
         data = self.cleaned_data["name"]
         if data in self.excluded_text:
