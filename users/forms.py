@@ -1,9 +1,10 @@
 from django.contrib.auth.forms import UserCreationForm
 
+from catalog.forms import StyleFormMixin
 from users.models import User
 
 
-class UserForm(UserCreationForm):
+class UserForm(StyleFormMixin, UserCreationForm):
 
     class Meta:
         model = User
