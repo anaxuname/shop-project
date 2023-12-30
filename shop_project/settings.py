@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 INSTALLED_APPS += [
     'catalog',
     'materials',
+    'users',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -140,3 +141,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+AUTH_USER_MODEL = 'users.User'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'shuanastasiy@yandex.ru'
+EMAIL_HOST_PASSWORD = 'medvukjkmjkjukmr'
+EMAIL_USE_SSL = True
