@@ -18,7 +18,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 
-from catalog.views import contacts_view, ProductListView, ProductDetailView, ProductCreateView, ProductUpdateView
+from catalog.views import contacts_view, ProductListView, ProductDetailView, ProductCreateView, ProductUpdateView, \
+    AccessDeniedView
 
 app_name = 'catalog'
 
@@ -27,6 +28,8 @@ urlpatterns = [
     path('contacts/', contacts_view, name='catalog_contacts'),
     path('product/<int:pk>', ProductDetailView.as_view(), name='catalog_product'),
     path('create/', ProductCreateView.as_view(), name='product_create'),
-    path('update/<int:pk>/', ProductUpdateView.as_view(), name='product_update')
+    path('update/<int:pk>/', ProductUpdateView.as_view(), name='product_update'),
+    path('denied/', AccessDeniedView.as_view(), name='catalog_access_denied'),
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

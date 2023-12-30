@@ -1,7 +1,9 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views import View
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView
 
 from catalog.forms import ProductForm
 from catalog.models import Product, Version
@@ -39,10 +41,17 @@ class ProductDetailView(DetailView):
         return context
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:catalog_index')
+    login_url = reverse_lazy('catalog:catalog_access_denied')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        form.object.user = self.request.user
+        self.object.save()
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -76,3 +85,7 @@ class ProductUpdateView(UpdateView):
             formset.instance = self.object
             formset.save()
         return super().form_valid(form)
+
+
+class AccessDeniedView(TemplateView):
+    template_name = "catalog/form_redirect.html"
