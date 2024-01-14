@@ -22,7 +22,7 @@ class Product(models.Model):
     purchase_price = models.IntegerField(verbose_name='цена за покупку')
     data_create = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     data_last_change = models.DateTimeField(auto_now=True, verbose_name='дата последнего изменения')
-
+    published = models.BooleanField(default=True, verbose_name='Опубликовано')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='авторизованый пользователь')
     def __str__(self):
         return self.name
@@ -30,6 +30,12 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'продукт'
         verbose_name_plural = 'продукты'
+        permissions = [
+            (
+                'work_with_products',
+                'Can add and correct products'
+            )
+        ]
 
 
 class Version(models.Model):

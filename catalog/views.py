@@ -1,17 +1,19 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.forms import inlineformset_factory
+from django.http import Http404
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView
 
-from catalog.forms import ProductForm
+from catalog.forms import ProductForm, ModeratorProductForm
 from catalog.models import Product, Version
 
 
 class ProductListView(ListView):
     model = Product
     template_name = 'catalog/index.html'
+
+
 # Create your views here.
 
 def contacts_view(request):
@@ -21,9 +23,7 @@ def contacts_view(request):
         message = request.Post.get('message')
         print(f'{name} ({email}): {message}')
 
-    context = {
-        'title': 'Контакты'
-    }
+    context = {'title': 'Контакты'}
     return render(request, 'catalog/contacts.html', context)
 
 
@@ -37,19 +37,19 @@ class ProductDetailView(DetailView):
             context['version'] = kwargs['object'].version.get()
         except Version.DoesNotExist:
             context['version'] = None
-        print(context)
         return context
 
 
-class ProductCreateView(LoginRequiredMixin, CreateView):
+class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
+    permission_required = 'catalog.change_product'
     success_url = reverse_lazy('catalog:catalog_index')
     login_url = reverse_lazy('catalog:catalog_access_denied')
 
     def form_valid(self, form):
         self.object = form.save()
-        form.object.user = self.request.user
+        self.object.user = self.request.user
         self.object.save()
         return super().form_valid(form)
 
@@ -62,10 +62,23 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
             context_data['formset'] = product_formset()
         return context_data
 
-class ProductUpdateView(UpdateView):
+
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
-    form_class = ProductForm
     success_url = reverse_lazy('catalog:catalog_index')
+
+    def get_form_class(self):
+        if self.request.user.groups.filter(name='Модератор').exists():
+            return ModeratorProductForm
+        else:
+            return ProductForm
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if (self.object.user == self.request.user or self.request.user.groups.filter(
+            name='Модератор').exists() or self.request.user.is_superuser):
+            return self.object
+        raise Http404
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -74,6 +87,8 @@ class ProductUpdateView(UpdateView):
             context_data['formset'] = product_formset(self.request.POST, instance=self.object)
         else:
             context_data['formset'] = product_formset(instance=self.object)
+        if self.request.user.groups.filter(name='Модератор').exists():
+            context_data['formset'] = ''
         return context_data
 
     def form_valid(self, form):

@@ -11,7 +11,7 @@ class StyleFormMixin:
             field.widget.attrs['class'] = 'form-control'
 
 
-class ProductForm(StyleFormMixin, forms.ModelForm):
+class BaseProductForm(StyleFormMixin, forms.ModelForm):
     excluded_text = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
 
     def clean_name(self):
@@ -31,3 +31,13 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
+
+
+class ProductForm(BaseProductForm):
+    pass
+
+
+class ModeratorProductForm(BaseProductForm):
+    class Meta:
+        model = Product
+        fields = ('description', 'published', 'category')
