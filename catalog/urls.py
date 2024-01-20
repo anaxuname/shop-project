@@ -17,6 +17,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
+from django.views.decorators.cache import cache_page
 
 from catalog.views import contacts_view, ProductListView, ProductDetailView, ProductCreateView, ProductUpdateView, \
     AccessDeniedView
@@ -26,7 +27,7 @@ app_name = 'catalog'
 urlpatterns = [
     path('', ProductListView.as_view(), name='catalog_index'),
     path('contacts/', contacts_view, name='catalog_contacts'),
-    path('product/<int:pk>', ProductDetailView.as_view(), name='catalog_product'),
+    path('product/<int:pk>', cache_page(60)(ProductDetailView.as_view()), name='catalog_product'),
     path('create/', ProductCreateView.as_view(), name='product_create'),
     path('update/<int:pk>/', ProductUpdateView.as_view(), name='product_update'),
     path('denied/', AccessDeniedView.as_view(), name='catalog_access_denied'),
